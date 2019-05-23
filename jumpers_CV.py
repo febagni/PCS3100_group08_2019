@@ -59,8 +59,11 @@ while(True):
 		sum_2y = sum_2y + M['m00']
 		sum_1x = sum_1x + M['m10']
 		sum_2x = sum_2x + M['m00']
-	cy = int(sum_1y/sum_2y)
-	cx = int(sum_1x/sum_2x)
+	try:
+		cy = int(sum_1y/sum_2y)
+		cx = int(sum_1x/sum_2x)
+	except ZeroDivisionError:
+		pass
 	bat = np.array([cx, cy])
 	if type(bat) is not np.int32:
 		cv2.circle(segimg, tuple(bat), 2, (0,255,0), 10)
