@@ -1,10 +1,10 @@
 import numpy as np
 import cv2
-from time import sleep
- 
-x=0
-p1=10
-p2=10
+
+x = 0
+cont_zeros = 0
+p1 = 10
+p2 =  10
 cap = cv2.VideoCapture(0)
 
 def nothing(x):
@@ -17,10 +17,10 @@ flag = 0
 cv2.namedWindow('frame')
 
 cv2.createTrackbar('Hl', 'frame', 0,255,nothing)
-cv2.createTrackbar('Hu', 'frame', 255,255,nothing)
-cv2.createTrackbar('Sl', 'frame', 0,255,nothing)
+cv2.createTrackbar('Hu', 'frame', 65,255,nothing)
+cv2.createTrackbar('Sl', 'frame', 65,255,nothing)
 cv2.createTrackbar('Su', 'frame', 255,255,nothing)
-cv2.createTrackbar('Vl', 'frame', 0,255,nothing)
+cv2.createTrackbar('Vl', 'frame', 105,255,nothing)
 cv2.createTrackbar('Vu', 'frame', 255,255,nothing)
 
 while(True):
@@ -64,6 +64,7 @@ while(True):
 		cx = int(sum_1x/sum_2x)
 	except ZeroDivisionError:
 		pass
+		
 	bat = np.array([cx, cy])
 	if type(bat) is not np.int32:
 		cv2.circle(segimg, tuple(bat), 2, (0,255,0), 10)
@@ -73,18 +74,25 @@ while(True):
 		last_cy = cy
 		
 	if cy > (last_cy+p1) :
-		print('-1')
+		if cont_zeros > 10:
+			print('-1')
+			cont_zeros = 0
 	elif cy < (last_cy-p2):
-		print('1')
+		if cont_zeros > 10:
+			print('1')
+			cont_zeros = 0
 	else:
 		print('0')
-		
+		cont_zeros = cont_zeros + 1
+	
+	if cont_zeros > 100:
+		cont_zeros = 11	
 		
 	last_cy = cy					
 
 	cv2.imshow('frame', segimg)
-	cv2.imshow('mask', mask)
-	cv2.imshow('hsv', hsv)
+	#cv2.imshow('mask', mask)
+	#cv2.imshow('hsv', hsv)
 
 	if cv2.waitKey(1) & 0xFF == ord('q'):
 		break
