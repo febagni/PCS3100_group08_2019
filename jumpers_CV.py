@@ -1,27 +1,50 @@
-import numpy as np
-import cv2
+'''
+ * @file jumpers_CV 
+ *
+ * @brief Real-time computer vision algorithm to track the Y-coordinate of a processed, segmented live video capture. 
+ *
+ * @author Felipe Bagni <febagni@usp.br>
+ * @author Gabriel Kishida <gabriel.kishida@usp.br> 
+ * 
+ * @date 05/2019
+ '''
 
-x = 0
-cont_zeros = 0
-p1 = 10
-p2 =  10
-cap = cv2.VideoCapture(0)
+'''**************************
+ *@brief Importing Libraries
+**************************'''
+import numpy as np	#NumPy
+import cv2	#OpenCV(4.1.0)
 
+'''***************************************
+ *@brief Initialization of some variables
+***************************************'''
+x = 0 #auxiliary variable
+cont_zeros = 0	#counter used to avoid position variation error
+p1 = 10	#roof value 
+p2 =  10 #floor value
+last_cy = 0 #retains the last value of the y coordiante from the point of interest to the following iteration
+flag = 0 #flag to check the first occurrence of cy and last_cy comparison
+
+'''@brief Initialization of the video capture'''
+cap = cv2.VideoCapture(0) #captures the video of the USB WebCam
+
+'''@brief Checks if the video was captured '''
 def nothing(x):
 	pass
 
-
-last_cy = 0
-flag = 0
-
+'''@brief Creates a window called frame, where the analysis will take place'''
 cv2.namedWindow('frame')
 
+'''****************************************************************************************
+ *@brief Creation of trackbars to adjust the HSV range with which the mask will be applied
+****************************************************************************************'''
 cv2.createTrackbar('Hl', 'frame', 0,255,nothing)
 cv2.createTrackbar('Hu', 'frame', 65,255,nothing)
 cv2.createTrackbar('Sl', 'frame', 65,255,nothing)
 cv2.createTrackbar('Su', 'frame', 255,255,nothing)
 cv2.createTrackbar('Vl', 'frame', 105,255,nothing)
 cv2.createTrackbar('Vu', 'frame', 255,255,nothing)
+
 
 while(True):
 	ret, frame = cap.read()
