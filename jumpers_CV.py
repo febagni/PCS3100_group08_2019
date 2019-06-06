@@ -5,6 +5,7 @@
  *
  * @author Felipe Bagni <febagni@usp.br>
  * @author Gabriel Kishida <gabriel.kishida@usp.br> 
+ * @author Kevin Onishi	<kevintaiyo@usp.br>
  * 
  * @date 05/2019
  '''
